@@ -1,5 +1,4 @@
 import styles from './page.module.scss';
-import SudokuGrid from "./components/SudokuGrid/SudokuGrid";
 import Sudoku from './components/Sudoku/Sudoku';
 
 async function getGrid() {
@@ -17,7 +16,6 @@ export default async function Home() {
 
 	return (
 		<main className={styles.main}>
-			{/* <SudokuGrid board={board} /> */}
 			<Sudoku board={board} />
 		</main>
 	);
