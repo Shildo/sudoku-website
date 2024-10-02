@@ -1,0 +1,11 @@
+.SudokuContainer {
+	display: grid;
+	height: 540px;
+	width: 540px;
+	border: 2px black solid;
+}
+
+.row {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+}
