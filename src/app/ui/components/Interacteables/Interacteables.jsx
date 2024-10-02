@@ -24,7 +24,7 @@ export default function Interacteables() {
 
 			<div className={styles.numpad}>
 				{Array.from({ length: 9 }, (_, i) => (
-					<CustomButton id={i + 1} className={styles.number}>
+					<CustomButton id={i + 1} key={i} className={styles.number}>
 						{i + 1}
 					</CustomButton>
 				))}
