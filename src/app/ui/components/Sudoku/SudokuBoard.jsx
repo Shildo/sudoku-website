@@ -1,8 +1,8 @@
 "use client";
 
-import styles from './Sudoku.module.scss';
+import styles from './SudokuBoard.module.scss';
 
-export default function Sudoku({ board }) {
+export default function SudokuBoard({ board }) {
 
 	const { value } = board;
 

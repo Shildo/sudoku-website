@@ -3,9 +3,17 @@
 @tailwind utilities;
 
 :root {
-	--background: #ffffff;
-	--foreground: #171717;
+	--background: #E0E1DD;
+	--text: #E0E1DD;
+	--hoverButton: #2A3B5B;
+	--border: #778DA9;
+	--a: #0D1B2A;
+	--hoverSudokuButton: #415A77;
+	--button: #415A77;
+	--darkerButton: #1B263B;
 }
 
 
-body {}
+body {
+	background-color: var(--background);
+}

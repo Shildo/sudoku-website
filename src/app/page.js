@@ -1,11 +1,9 @@
 import styles from './page.module.scss';
-import Sudoku from './ui/components/Sudoku/Sudoku';
+import SudokuBoard from './ui/components/Sudoku/SudokuBoard';
+import Interacteables from './ui/components/Interacteables/Interacteables';
+import NavBar from './ui/components/NavBar/NavBar';
 
-async function getGrid() {
-	const res = fetch("https://sudoku-api.vercel.app/api/dosuku?query={newboard(limit:1){grids{value,difficulty,solution}}}")
-	const data = (await res).json();
-	return data;
-}
+import { getGrid } from './lib/functionalities';
 
 export default async function Home() {
 	const grid = await getGrid();
@@ -14,7 +12,11 @@ export default async function Home() {
 
 	return (
 		<main className={styles.main}>
-			<Sudoku board={board} />
+			<NavBar />
+			<div className={styles.pageContent}>
+				<SudokuBoard board={board} />
+				<Interacteables />
+			</div>
 		</main>
 	);
 }

@@ -2,7 +2,7 @@ import { montserrat } from "./fonts";
 import "./globals.css";
 
 export const metadata = {
-	title: "Sudoku",
+	title: "Sudoku-website",
 	description: "Meet my sudoku app project",
 };
 

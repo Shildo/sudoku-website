@@ -1,0 +1,53 @@
+.interacteables {
+
+	.options {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 20px;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+
+
+		.timer {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+
+			gap: 20px;
+
+			.eyesSvgs {
+				width: 30px;
+				height: 30px;
+				padding: 5px;
+				border-radius: 10px;
+			}
+		}
+
+		.newGameButton {
+			padding: 10px 20px;
+			font-size: 20px;
+			background-color: var(--darkerButton);
+
+			&:hover {
+				background-color: var(--hoverButton);
+			}
+		}
+	}
+
+
+
+
+	.numpad {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 5px;
+
+		.number {
+			width: 100px;
+			height: 100px;
+			font-size: 36px;
+		}
+	}
+}
