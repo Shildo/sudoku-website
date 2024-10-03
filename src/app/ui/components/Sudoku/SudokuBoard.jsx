@@ -20,9 +20,9 @@ export default function SudokuBoard({ board }) {
 			<tbody>
 				{
 					Array.from({ length: 9 }, (_, row) => (
-						<tr className={styles.box} key={row}>
+						<tr className={styles.box} key={row} id={`row-${row + 1}`}>
 							{Array.from({ length: 9 }, (_, col) => (
-								<td key={col} className={`${styles.column} p-0`}>
+								<td className={`${styles.column} p-0`} key={col}>
 									{
 										value[row][col] === 0 ? (
 											<input

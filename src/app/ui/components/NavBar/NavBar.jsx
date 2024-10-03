@@ -6,9 +6,9 @@ import CustomButton from '../CustomButton/CustomButton';
 export default function NavBar() {
 	return (
 		<nav className={styles.navBar}>
-			<Link href='/' className={styles.sudokuWebsite}>
+			<a href='/' className={styles.sudokuWebsite}>
 				Sudoku-website
-			</Link>
+			</a>
 			<CustomButton className={styles.gitButton}>
 				<Link href='https://github.com/Shildo/sudoku-website' className={styles.githubLink}>
 					Github
