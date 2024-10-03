@@ -1,0 +1,13 @@
+.optionButtonContainer {
+	width: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 5px;
+
+	.optionButton {
+		height: 50px;
+		width: 50px;
+	}
+}

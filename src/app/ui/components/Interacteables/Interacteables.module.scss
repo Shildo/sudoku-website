@@ -14,7 +14,6 @@
 			justify-content: center;
 			align-items: center;
 			text-align: center;
-
 			gap: 20px;
 
 			.eyesSvgs {
@@ -25,9 +24,19 @@
 			}
 		}
 
+		.optionButtons {
+			display: contents;
+
+			.boardOptionsContainer {
+				display: flex;
+				gap: 15px;
+			}
+		}
+
 		.newGameButton {
 			padding: 10px 20px;
 			font-size: 20px;
+			margin-bottom: 10px;
 			background-color: var(--darkerButton);
 
 			&:hover {
@@ -35,9 +44,6 @@
 			}
 		}
 	}
-
-
-
 
 	.numpad {
 		display: grid;

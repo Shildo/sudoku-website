@@ -1,5 +1,3 @@
-"use client"
-
 import Link from 'next/link';
 import styles from './NavBar.module.scss';
 import GithubSvg from '@/public/svg/GithubSvg';
@@ -8,7 +6,7 @@ import CustomButton from '../CustomButton/CustomButton';
 export default function NavBar() {
 	return (
 		<nav className={styles.navBar}>
-			<Link href='/' className={styles.sudokuWebsite} onClick={() => window.location.reload()}>
+			<Link href='/' className={styles.sudokuWebsite}>
 				Sudoku-website
 			</Link>
 			<CustomButton className={styles.gitButton}>
