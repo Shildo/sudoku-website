@@ -9,12 +9,24 @@
 		gap: 10px;
 
 
-		.timer {
+		.timerContainer {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			text-align: center;
 			gap: 20px;
+
+			.timer {
+				display: flex;
+				align-items: center;
+				gap: 2px;
+
+				.timerDigit {
+					width: 10px;
+					text-align: center;
+					font-weight: 500;
+				}
+			}
 
 			.eyesSvgs {
 				width: 30px;

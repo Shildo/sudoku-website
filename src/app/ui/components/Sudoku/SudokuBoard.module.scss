@@ -1,13 +1,13 @@
 .sudokuTable {
 	border-collapse: collapse;
-	border: 4px black solid;
+	border: 2px solid var(--border);
 }
 
 .cell {
 	width: 60px;
 	height: 60px;
 	text-align: center;
-	font-size: 20px;
+	font-size: 26px;
 
 	&:focus {
 		outline: none;
@@ -19,9 +19,9 @@
 }
 
 .column:nth-child(3n) {
-	border-right: 4px solid black;
+	border-right: 2px solid var(--border);
 }
 
 .box:nth-child(3n) {
-	border-bottom: 4px solid black;
+	border-bottom: 2px solid var(--border);
 }

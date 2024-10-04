@@ -6,7 +6,7 @@
 	justify-content: space-between;
 	align-items: center;
 	top: 0;
-	border-bottom: 2px solid var(--border);
+	box-shadow: 0 4px 2px -2px var(--border);
 	padding: 0 30px;
 
 	.sudokuWebsite {
