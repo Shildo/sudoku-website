@@ -66,7 +66,7 @@ export default function Interacteables({ fetchNeWBoard }) {
 				</div>
 
 				<div className={styles.optionButtons}>
-					<CustomButton className={styles.newGameButton} onClick={fetchNeWBoard}>
+					<CustomButton className={styles.newGameButton} onClick={() => { fetchNeWBoard(); reset(); setIsPaused(false) }}>
 						New game
 					</CustomButton>
 					<div className={styles.boardOptionsContainer}>
