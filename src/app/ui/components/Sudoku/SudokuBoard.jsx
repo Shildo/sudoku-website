@@ -10,11 +10,22 @@ export default function SudokuBoard({ board }) {
 		setSudokuGrid(board);
 	}, [board]);
 
-	const handleKeyDown = (event) => {
-		const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+	const handleKeyDown = (event, row, col) => {
+		const allowedKeys = ['Backspace', 'Tab', 'Delete'];
 		const key = event.key;
 
-		if ((!/[1-9]/.test(key) && !allowedKeys.includes(key))) {
+		if (/[1-9]/.test(key)) {
+
+			const newGrid = [...sudokuGrid].map(row => [...row]);
+			newGrid[row][col] = parseInt(key);
+			setSudokuGrid(newGrid);
+		} else if (allowedKeys.includes(key)) {
+			const newGrid = [...sudokuGrid].map(row => [...row]);
+			if (key === 'Backspace' || key === 'Delete') {
+				newGrid[row][col] = 0;
+			}
+			setSudokuGrid(newGrid);
+		} else {
 			event.preventDefault();
 		}
 	};
@@ -26,28 +37,14 @@ export default function SudokuBoard({ board }) {
 					<tr className={styles.box} key={row} id={`row-${row + 1}`}>
 						{Array.from({ length: 9 }, (_, col) => (
 							<td className={`${styles.column} p-0`} key={col}>
-								{
-									sudokuGrid[row][col] === 0 ? (
-										<input
-											value={sudokuGrid[row][col] === 0 ? "" : sudokuGrid[row][col]}
-											id={`${row}-${col}`}
-											className={styles.cell}
-											size="2"
-											maxLength="1"
-											onKeyDown={handleKeyDown}
-											onChange={(e) => handleChange(e, row, col)}
-										/>
-									) : (
-										<input
-											value={sudokuGrid[row][col]}
-											id={`${row}-${col}`}
-											className={`${styles.cell} font-bold text-numbersDefault`}
-											readOnly
-											size="2"
-											maxLength="1"
-										/>
-									)
-								}
+								<div
+									id={`cell-${row}-${col}`}
+									className={`${styles.cell} ${sudokuGrid[row][col] === 0 ? '' : 'font-bold text-numbersDefault'}`}
+									tabIndex="0"
+									onKeyDown={(e) => handleKeyDown(e, row, col)}
+								>
+									{sudokuGrid[row][col] !== 0 ? sudokuGrid[row][col] : ''}
+								</div>
 							</td>
 						))}
 					</tr>

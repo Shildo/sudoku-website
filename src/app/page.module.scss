@@ -1,14 +1,19 @@
 .main {
 	display: flex;
-	align-items: center;
 	justify-content: center;
 	height: 100vh;
 }
 
 .pageContent {
-	height: 700px;
-	width: 1300px;
 	display: flex;
-	justify-content: space-evenly;
+	gap: 80px;
 	align-items: center;
+}
+
+@media (max-width: 1000px) {
+	.pageContent {
+		flex-direction: column;
+		margin-top: 100px;
+		gap: 20px;
+	}
 }

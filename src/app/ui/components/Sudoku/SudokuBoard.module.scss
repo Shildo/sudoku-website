@@ -1,12 +1,14 @@
 .sudokuTable {
 	border-collapse: collapse;
-	border: 2px solid var(--border);
+	border: 3px solid var(--border);
 }
 
 .cell {
 	width: 60px;
 	height: 60px;
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	font-size: 26px;
 
 	&:focus {
@@ -19,9 +21,25 @@
 }
 
 .column:nth-child(3n) {
-	border-right: 2px solid var(--border);
+	border-right: 3px solid var(--border);
 }
 
 .box:nth-child(3n) {
-	border-bottom: 2px solid var(--border);
+	border-bottom: 3px solid var(--border);
+}
+
+
+@media (max-width: 1000px) {
+	.cell {
+		width: 50px;
+		height: 50px;
+	}
+}
+
+@media (max-width: 550px) {
+	.cell {
+		width: 30px;
+		height: 30px;
+		font-size: 18px;
+	}
 }
