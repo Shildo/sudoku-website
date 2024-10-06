@@ -9,9 +9,10 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 26px;
+	font-size: 30px;
 
 	&:focus {
+		background-color: var(--cellFocus);
 		outline: none;
 	}
 }
@@ -42,4 +43,15 @@
 		height: 30px;
 		font-size: 18px;
 	}
+}
+
+
+.initial {
+	color: var(--numbersDefault);
+	font-weight: bold;
+}
+
+.editable {
+	color: black;
+	font-weight: normal;
 }

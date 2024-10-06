@@ -13,10 +13,11 @@ import OptionButton from '../OptionButton/OptionButton';
 import { useState, useEffect } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 
-export default function Interacteables({ fetchNeWBoard }) {
+export default function Interacteables({ fetchNeWBoard, displayNumber }) {
 
 	const [isVisible, setIsVisible] = useState(true);
 	const [isPaused, setIsPaused] = useState(false)
+	const [number, setNumber] = useState(null);
 
 	const { seconds, minutes, hours, start, pause, reset } = useStopwatch({ autoStart: true });
 
@@ -84,12 +85,13 @@ export default function Interacteables({ fetchNeWBoard }) {
 			</div>
 
 			<div className={styles.numpad}>
-				{Array.from({ length: 9 }, (_, i) => (
-					<CustomButton id={i + 1} key={i + 1} className={styles.number}>
-						{i + 1}
+				{Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
+					<CustomButton id={num} key={num} className={styles.number} onClick={() => displayNumber(num)}>
+						{num}
 					</CustomButton>
 				))}
+
 			</div>
-		</div>
+		</div >
 	)
 }

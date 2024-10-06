@@ -3,12 +3,29 @@
 import styles from './SudokuBoard.module.scss';
 import { useEffect, useState } from 'react';
 
-export default function SudokuBoard({ board }) {
+export default function SudokuBoard({ board, number }) {
 	const [sudokuGrid, setSudokuGrid] = useState(board);
 
 	useEffect(() => {
 		setSudokuGrid(board);
 	}, [board]);
+
+	useEffect(() => {
+		const clickableCells = document.querySelectorAll('.clickeable');
+		clickableCells.forEach(cell => {
+			cell.addEventListener('click', function () {
+				console.log('clicked');
+			});
+		});
+
+		return () => {
+			clickableCells.forEach(cell => {
+				cell.removeEventListener('click', function () {
+					console.log('clicked');
+				});
+			});
+		};
+	}, []);
 
 	const handleKeyDown = (event, row, col) => {
 		const allowedKeys = ['Backspace', 'Tab', 'Delete'];
@@ -38,9 +55,9 @@ export default function SudokuBoard({ board }) {
 						{Array.from({ length: 9 }, (_, col) => (
 							<td className={`${styles.column} p-0`} key={col}>
 								<div
-									id={`cell-${row}-${col}`}
-									className={`${styles.cell} ${sudokuGrid[row][col] === 0 ? '' : 'font-bold text-numbersDefault'}`}
-									tabIndex="0"
+									id={`cell-${row + 1}-${col + 1}`}
+									className={`${styles.cell} ${board[row][col] === 0 ? 'clickeable' : 'font-bold text-numbersDefault'}`}
+									tabIndex={`${board[row][col] === 0 ? '0' : ''}`}
 									onKeyDown={(e) => handleKeyDown(e, row, col)}
 								>
 									{sudokuGrid[row][col] !== 0 ? sudokuGrid[row][col] : ''}
