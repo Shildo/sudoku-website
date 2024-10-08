@@ -1,25 +1,32 @@
 "use client"
 
 import styles from './Interacteables.module.scss';
+
+import { useEffect, useState } from 'react';
+import { useStopwatch } from 'react-timer-hook';
+
 import CustomButton from '../CustomButton/CustomButton';
-import EyeSvg from '@/public/svg/EyeSvg';
-import EyeSlashSvg from '@/public/svg/EyeSlashSvg';
+import OptionButton from '../OptionButton/OptionButton';
+import Timer from '../Timer/Timer';
 import PencilSvg from '@/public/svg/PencilSvg';
 import PauseSvg from '@/public/svg/PauseSvg';
 import PlaySvg from '@/public/svg/PlaySvg';
 import RedoSvg from '@/public/svg/RedoSvg';
 import TrashSvg from '@/public/svg/TrashSvg';
-import OptionButton from '../OptionButton/OptionButton';
-import { useState, useEffect } from 'react';
-import { useStopwatch } from 'react-timer-hook';
 
-export default function Interacteables({ fetchNeWBoard, displayNumber }) {
+export default function Interacteables({ loading, selectedCell, handleCellUpdate, fetchNewBoard }) {
+	const [isPaused, setIsPaused] = useState(false);
 
-	const [isVisible, setIsVisible] = useState(true);
-	const [isPaused, setIsPaused] = useState(false)
-	const [number, setNumber] = useState(null);
+	const { hours, minutes, seconds, reset, pause, start } = useStopwatch({ autoStart: false });
 
-	const { seconds, minutes, hours, start, pause, reset } = useStopwatch({ autoStart: true });
+	useEffect(() => {
+		if (!loading) {
+			start();
+			setIsPaused(false);
+		} else {
+			pause();
+		}
+	}, [loading]);
 
 	useEffect(() => {
 		if (isPaused) {
@@ -31,67 +38,71 @@ export default function Interacteables({ fetchNeWBoard, displayNumber }) {
 
 	const options = [
 		{
+			"name": "restart-button",
 			"icon": <RedoSvg />,
 			"text": "Restart"
 		},
 		{
+			"name": "erase-button",
 			"icon": <TrashSvg />,
 			"text": "Erase"
 		},
 		{
+			"name": "notes-button",
 			"icon": <PencilSvg />,
 			"text": "Notes"
 		}
 	]
 
+	const handleNumpadClick = (number) => {
+		if (selectedCell.row !== null && selectedCell.col !== null) {
+			handleCellUpdate(selectedCell.row, selectedCell.col, number);
+		}
+	};
+
+	const handleNewGame = () => {
+		setIsPaused(false);
+		reset();
+		try {
+			fetchNewBoard();
+		} catch (e) {
+			alert('Error fetching board: ', e)
+		}
+	}
+
 	return (
 		<div className={styles.interacteables}>
-			<div className={styles.options}>
-				<div className={styles.timerContainer}>
-					<div>
-						<h4>Time</h4>
-						<div className={`${styles.timer} ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-							<span className={styles.timerDigit}>{hours.toString().padStart(2, '0')[0]}</span>
-							<span className={styles.timerDigit}>{hours.toString().padStart(2, '0')[1]}</span>
-							<span>:</span>
-							<span className={styles.timerDigit}>{minutes.toString().padStart(2, '0')[0]}</span>
-							<span className={styles.timerDigit}>{minutes.toString().padStart(2, '0')[1]}</span>
-							<span>:</span>
-							<span className={styles.timerDigit}>{seconds.toString().padStart(2, '0')[0]}</span>
-							<span className={styles.timerDigit}>{seconds.toString().padStart(2, '0')[1]}</span>
-						</div>
-					</div>
-					<CustomButton className={styles.eyesSvgs} onClick={() => setIsVisible(!isVisible)}>
-						{isVisible ? <EyeSvg /> : <EyeSlashSvg />}
-					</CustomButton>
-				</div>
 
-				<div className={styles.optionButtons}>
-					<CustomButton className={styles.newGameButton} onClick={() => { fetchNeWBoard(); reset(); setIsPaused(false) }}>
+			<div className={styles.options}>
+				<div className={styles.timerAndNewGameContainer}>
+					<Timer hours={hours} minutes={minutes} seconds={seconds} />
+					<CustomButton className={`${styles.newGameButton} ${loading ? 'opacity-50' : null}`} disabled={loading} onClick={() => handleNewGame()}>
 						New game
 					</CustomButton>
+				</div>
+				<div className={styles.optionButtons}>
 					<div className={styles.boardOptionsContainer}>
 						{isPaused ?
-							<OptionButton icon={<PlaySvg />} text={"Play"} onClick={() => setIsPaused(false)} />
+							<OptionButton className={styles.option} aria-label="play-button" icon={<PlaySvg />} text={"Play"} onClick={() => setIsPaused(false)} />
 							:
-							<OptionButton icon={<PauseSvg />} text={"Pause"} onClick={() => setIsPaused(true)} />
+							<OptionButton className={styles.option} aria-label="pause-button" icon={<PauseSvg />} text={"Pause"} onClick={() => setIsPaused(true)} />
 						}
 
 						{options.map((data, index) => (
-							<OptionButton key={index} icon={data.icon} text={data.text} />
+							<OptionButton className={styles.option} aria-label={data.name} key={index} icon={data.icon} text={data.text} />
 						))}
 					</div>
 				</div>
+
 			</div>
 
 			<div className={styles.numpad}>
-				{Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
-					<CustomButton id={num} key={num} className={styles.number} onClick={() => displayNumber(num)}>
-						{num}
+				{Array.from({ length: 9 }, (_, i) => (
+					<CustomButton name={i + 1} key={i + 1} className={styles.number} onClick={() => handleNumpadClick(i + 1)}>
+						{i + 1}
 					</CustomButton>
 				))}
-
 			</div>
-		</div >
-	)
+		</div>
+	);
 }

@@ -1,0 +1,36 @@
+.timerContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	gap: 20px;
+
+	.timer {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+
+		.timerDigit {
+			width: 10px;
+			text-align: center;
+			font-weight: 500;
+		}
+	}
+
+	.eyesSvgs {
+		width: 30px;
+		height: 30px;
+		padding: 5px;
+		border-radius: 10px;
+	}
+}
+
+@media (max-width: 550px) {
+	.timerContainer {
+		gap: 10px !important;
+	}
+
+	.timer {
+		font-size: 14px;
+	}
+}

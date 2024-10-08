@@ -29,23 +29,6 @@
 	border-bottom: 3px solid var(--border);
 }
 
-
-@media (max-width: 1000px) {
-	.cell {
-		width: 50px;
-		height: 50px;
-	}
-}
-
-@media (max-width: 550px) {
-	.cell {
-		width: 30px;
-		height: 30px;
-		font-size: 18px;
-	}
-}
-
-
 .initial {
 	color: var(--numbersDefault);
 	font-weight: bold;
@@ -54,4 +37,50 @@
 .editable {
 	color: black;
 	font-weight: normal;
+}
+
+@media (max-width: 1000px) {
+	.cell {
+		width: 60px;
+		height: 60px;
+	}
+}
+
+@media (max-width: 600px) {
+	.cell {
+		width: 55px;
+		height: 55px;
+		font-size: 26px;
+	}
+}
+
+
+@media (max-width: 550px) {
+	.cell {
+		width: 45px;
+		height: 45px;
+		font-size: 24px;
+	}
+}
+
+
+@media (max-width: 450px) {
+	.cell {
+		width: 40px;
+		height: 40px;
+	}
+}
+
+@media (max-width: 420px) {
+	.cell {
+		width: 35px;
+		height: 35px;
+	}
+}
+
+@media (max-width: 320px) {
+	.cell {
+		width: 30px;
+		height: 30px;
+	}
 }

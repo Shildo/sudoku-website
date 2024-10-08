@@ -11,7 +11,9 @@ export default function NavBar() {
 			</Link>
 			<CustomButton className={styles.gitButton}>
 				<Link href='https://github.com/Shildo/sudoku-website' className={styles.githubLink}>
-					Github
+					<span>
+						Github
+					</span>
 					<GithubSvg />
 				</Link>
 			</CustomButton>

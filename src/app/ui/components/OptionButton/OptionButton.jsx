@@ -10,7 +10,7 @@ export default function OpenButton({ className, icon, text = null, ...props }) {
 			<CustomButton className={styles.optionButton} {...props}>
 				{icon}
 			</CustomButton>
-			<p>{text}</p>
+			<span>{text}</span>
 		</div>
 	)
 }

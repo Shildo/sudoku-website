@@ -1,4 +1,4 @@
-import styles from '../Sudoku/SudokuBoard.module.scss';
+import styles from '../SudokuBoard/SudokuBoard.module.scss';
 
 export default function SkeletonSudokuBoard() {
 	return (
