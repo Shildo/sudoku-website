@@ -12,8 +12,29 @@ export default function Home() {
 	const [editableBoard, setEditableBoard] = useState([]);
 	const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
 	const [loading, setLoading] = useState(true);
+	const [isNotesMode, setIsNotesMode] = useState(false);
 
 	const controllerRef = useRef(null);
+
+	const resetBoard = () => {
+		setEditableBoard(initializeBoard(initialBoard));
+	}
+	const eraseNumber = () => {
+		if (selectedCell.row !== null && selectedCell.col !== null) {
+			const newBoard = [...editableBoard];
+			if (initialBoard[selectedCell.row][selectedCell.col] === 0) {
+				newBoard[selectedCell.row][selectedCell.col].value = 0;
+				newBoard[selectedCell.row][selectedCell.col].notes = [];
+				setEditableBoard(newBoard);
+			}
+		}
+	}
+	const takeNotes = () => {
+		if (selectedCell)
+			setIsNotesMode(prev => !prev);
+	}
+
+	const boardOptions = { resetBoard, eraseNumber, takeNotes }
 
 	const fetchBoard = async () => {
 
@@ -33,7 +54,7 @@ export default function Home() {
 			const data = board.newboard.grids[0].value;
 
 			setInitialBoard(data);
-			setEditableBoard([...data.map(row => [...row])]);
+			setEditableBoard(initializeBoard(data));
 		} catch (error) {
 			if (error.name === 'AbortError') {
 				console.log('Fetch aborted');
@@ -47,14 +68,30 @@ export default function Home() {
 	const handleCellUpdate = (row, col, number) => {
 		if (initialBoard[row][col] === 0) {
 			const newBoard = [...editableBoard];
-			newBoard[row][col] = number;
+			if (isNotesMode) {
+				const notes = newBoard[row][col].notes.includes(number)
+					? newBoard[row][col].notes.filter(n => n !== number)
+					: [...newBoard[row][col].notes, number];
+				newBoard[row][col].notes = notes;
+			} else {
+				newBoard[row][col].value = number;
+				newBoard[row][col].notes = [];
+			}
 			setEditableBoard(newBoard);
 		}
 	};
 
+	const initializeBoard = (data) => {
+		return data.map(row =>
+			row.map(value => ({
+				value,
+				notes: []
+			}))
+		);
+	};
+
 	useEffect(() => {
 		fetchBoard();
-
 		return () => {
 			if (controllerRef.current) {
 				controllerRef.current.abort();
@@ -75,6 +112,7 @@ export default function Home() {
 						editableBoard={editableBoard}
 						setSelectedCell={setSelectedCell}
 						handleCellUpdate={handleCellUpdate}
+						isNotesMode={isNotesMode}
 					/>
 				)}
 				<Interacteables
@@ -82,6 +120,8 @@ export default function Home() {
 					selectedCell={selectedCell}
 					handleCellUpdate={handleCellUpdate}
 					fetchNewBoard={fetchBoard}
+					boardOptions={boardOptions}
+					isNotesMode={isNotesMode}
 				/>
 			</div>
 		</main>

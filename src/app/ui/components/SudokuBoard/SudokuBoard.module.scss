@@ -39,6 +39,22 @@
 	font-weight: normal;
 }
 
+.notes {
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+	font-size: 10px;
+	color: gray;
+}
+
+.note {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 @media (max-width: 1000px) {
 	.cell {
 		width: 60px;

@@ -14,7 +14,7 @@ import PlaySvg from '@/public/svg/PlaySvg';
 import RedoSvg from '@/public/svg/RedoSvg';
 import TrashSvg from '@/public/svg/TrashSvg';
 
-export default function Interacteables({ loading, selectedCell, handleCellUpdate, fetchNewBoard }) {
+export default function Interacteables({ loading, selectedCell, handleCellUpdate, fetchNewBoard, boardOptions, isNotesMode }) {
 	const [isPaused, setIsPaused] = useState(false);
 
 	const { hours, minutes, seconds, reset, pause, start } = useStopwatch({ autoStart: false });
@@ -36,23 +36,10 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 		}
 	}, [isPaused]);
 
-	const options = [
-		{
-			"name": "restart-button",
-			"icon": <RedoSvg />,
-			"text": "Restart"
-		},
-		{
-			"name": "erase-button",
-			"icon": <TrashSvg />,
-			"text": "Erase"
-		},
-		{
-			"name": "notes-button",
-			"icon": <PencilSvg />,
-			"text": "Notes"
-		}
-	]
+	const resetBoard = () => {
+		reset();
+		boardOptions.resetBoard();
+	}
 
 	const handleNumpadClick = (number) => {
 		if (selectedCell.row !== null && selectedCell.col !== null) {
@@ -87,10 +74,13 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 							:
 							<OptionButton className={styles.option} aria-label="pause-button" icon={<PauseSvg />} text={"Pause"} onClick={() => setIsPaused(true)} />
 						}
+						<OptionButton className={styles.option} aria-label="restart-button" icon={<RedoSvg />} text="Restart" onClick={resetBoard} />
+						<OptionButton className={styles.option} aria-label="erase-button" icon={<TrashSvg />} text="Erase" onClick={boardOptions.eraseNumber} />
+						<div className={styles.notesContainer}>
+							<div className={`${styles.cartel} ${isNotesMode ? styles.notesOn : ''}`}>{isNotesMode ? 'On' : 'Off'}</div>
+							<OptionButton className={styles.option} aria-label="notes-button" icon={<PencilSvg />} text="Notes" onClick={boardOptions.takeNotes} />
+						</div>
 
-						{options.map((data, index) => (
-							<OptionButton className={styles.option} aria-label={data.name} key={index} icon={data.icon} text={data.text} />
-						))}
 					</div>
 				</div>
 
