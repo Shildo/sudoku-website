@@ -16,9 +16,6 @@ export default function Home() {
 
 	const controllerRef = useRef(null);
 
-	const resetBoard = () => {
-		setEditableBoard(initializeBoard(initialBoard));
-	}
 	const eraseNumber = () => {
 		if (selectedCell.row !== null && selectedCell.col !== null) {
 			const newBoard = [...editableBoard];
@@ -34,7 +31,7 @@ export default function Home() {
 			setIsNotesMode(prev => !prev);
 	}
 
-	const boardOptions = { resetBoard, eraseNumber, takeNotes }
+	const boardOptions = { eraseNumber, takeNotes }
 
 	const fetchBoard = async () => {
 

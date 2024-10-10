@@ -11,7 +11,6 @@ import Timer from '../Timer/Timer';
 import PencilSvg from '@/public/svg/PencilSvg';
 import PauseSvg from '@/public/svg/PauseSvg';
 import PlaySvg from '@/public/svg/PlaySvg';
-import RedoSvg from '@/public/svg/RedoSvg';
 import TrashSvg from '@/public/svg/TrashSvg';
 
 export default function Interacteables({ loading, selectedCell, handleCellUpdate, fetchNewBoard, boardOptions, isNotesMode }) {
@@ -35,11 +34,6 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 			start();
 		}
 	}, [isPaused]);
-
-	const resetBoard = () => {
-		reset();
-		boardOptions.resetBoard();
-	}
 
 	const handleNumpadClick = (number) => {
 		if (selectedCell.row !== null && selectedCell.col !== null) {
@@ -74,10 +68,9 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 							:
 							<OptionButton className={styles.option} aria-label="pause-button" icon={<PauseSvg />} text={"Pause"} onClick={() => setIsPaused(true)} />
 						}
-						<OptionButton className={styles.option} aria-label="restart-button" icon={<RedoSvg />} text="Restart" onClick={resetBoard} />
 						<OptionButton className={styles.option} aria-label="erase-button" icon={<TrashSvg />} text="Erase" onClick={boardOptions.eraseNumber} />
 						<div className={styles.notesContainer}>
-							<div className={`${styles.cartel} ${isNotesMode ? styles.notesOn : ''}`}>{isNotesMode ? 'On' : 'Off'}</div>
+							<div className={styles.cartel}>{isNotesMode ? 'On' : 'Off'}</div>
 							<OptionButton className={styles.option} aria-label="notes-button" icon={<PencilSvg />} text="Notes" onClick={boardOptions.takeNotes} />
 						</div>
 
