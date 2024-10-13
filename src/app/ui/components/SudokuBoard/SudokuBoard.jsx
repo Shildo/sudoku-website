@@ -1,8 +1,11 @@
 "use client"
 
+import { useState } from 'react';
 import styles from './SudokuBoard.module.scss'
 
 export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, handleCellUpdate, isNotesMode }) {
+
+	const [focusedCell, setFocusedCell] = useState({ row: null, col: null });
 
 	const handleKeyDown = (event, row, col) => {
 		const key = event.key;
@@ -14,6 +17,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 	};
 	const handleCellClick = (row, col) => {
 		setSelectedCell({ row, col });
+		setFocusedCell({ row, col });
 	};
 
 	return (
@@ -23,7 +27,8 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 					<tr key={rowIndex} className={styles.box}>
 						{row.map((cell, colIndex) => {
 							const isInitialValue = initialBoard[rowIndex][colIndex] !== 0;
-							const cellClasses = `${styles.cell} ${isInitialValue ? styles.initial : styles.editable}`;
+							const isFocused = focusedCell && focusedCell.row === rowIndex && focusedCell.col === colIndex;
+							const cellClasses = `${styles.cell} ${isInitialValue ? styles.initial : styles.editable} ${isFocused ? styles.focused : ''}`;
 
 							return (
 								<td key={colIndex} className={`${styles.column} p-0`}>
@@ -34,7 +39,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 										onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
 										onClick={() => handleCellClick(rowIndex, colIndex)}
 									>
-										{isNotesMode && cell.notes.length > 0 ? ( // If in notes mode, render notes
+										{isNotesMode && cell.notes.length > 0 ? (
 											<div className={styles.notes}>
 												{Array.from({ length: 9 }, (_, i) => (
 													<div key={i} className={styles.note}>
@@ -43,7 +48,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 												))}
 											</div>
 										) : (
-											cell.value !== 0 ? cell.value : '' // Otherwise, render the cell value
+											cell.value !== 0 ? cell.value : ''
 										)}
 									</div>
 								</td>
