@@ -70,7 +70,7 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 						}
 						<OptionButton className={styles.option} aria-label="erase-button" icon={<TrashSvg />} text="Erase" onClick={boardOptions.eraseNumber} />
 						<div className={styles.notesContainer}>
-							<div className={styles.cartel}>{isNotesMode ? 'On' : 'Off'}</div>
+							<div className={`${styles.cartel} ${isNotesMode ? styles.cartelActive : ''}`}>{isNotesMode ? 'On' : 'Off'}</div>
 							<OptionButton className={styles.option} aria-label="notes-button" icon={<PencilSvg />} text="Notes" onClick={boardOptions.takeNotes} />
 						</div>
 
