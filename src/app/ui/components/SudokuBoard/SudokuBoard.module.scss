@@ -70,7 +70,6 @@
 	}
 }
 
-
 @media (max-width: 550px) {
 	.cell {
 		width: 45px;
@@ -78,7 +77,6 @@
 		font-size: 24px;
 	}
 }
-
 
 @media (max-width: 450px) {
 	.cell {
@@ -96,6 +94,10 @@
 	.cell {
 		width: 35px;
 		height: 35px;
+	}
+
+	.notes {
+		height: max-content;
 	}
 }
 
