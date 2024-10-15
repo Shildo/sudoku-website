@@ -1,26 +1,39 @@
+.allContainer {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50vh;
+}
+
 .sudokuTable {
 	border-collapse: collapse;
 	border: 3px solid var(--border);
+	height: 558px;
+	width: 558px;
 }
 
 .cell {
-	width: 60px;
-	height: 60px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	font-size: 30px;
+	user-select: none;
+	width: 100%;
+	height: 100%;
 }
 
-.column {
+.box {
 	border: 1px solid grey;
-}
-
-.column:nth-child(3n) {
-	border-right: 3px solid var(--border);
+	width: 10%;
+	height: 10%;
 }
 
 .box:nth-child(3n) {
+	border-right: 3px solid var(--border);
+}
+
+.column:nth-child(3n) {
 	border-bottom: 3px solid var(--border);
 }
 
@@ -55,33 +68,35 @@
 	outline: none;
 }
 
-@media (max-width: 1000px) {
-	.cell {
-		width: 60px;
-		height: 60px;
-	}
-}
-
 @media (max-width: 600px) {
+	.sudokuTable {
+		width: 510px;
+		height: 510px;
+	}
+
 	.cell {
-		width: 55px;
-		height: 55px;
 		font-size: 26px;
 	}
 }
 
 @media (max-width: 550px) {
+	.sudokuTable {
+		width: 420px;
+		height: 420px;
+	}
+
 	.cell {
-		width: 45px;
-		height: 45px;
 		font-size: 24px;
 	}
 }
 
 @media (max-width: 450px) {
+	.sudokuTable {
+		height: 375px;
+		width: 375px;
+	}
+
 	.cell {
-		width: 40px;
-		height: 40px;
 		font-size: 20px;
 	}
 
@@ -91,9 +106,9 @@
 }
 
 @media (max-width: 420px) {
-	.cell {
-		width: 35px;
-		height: 35px;
+	.sudokuTable {
+		height: 330px;
+		width: 330px;
 	}
 
 	.notes {
@@ -102,9 +117,9 @@
 }
 
 @media (max-width: 320px) {
-	.cell {
-		width: 30px;
-		height: 30px;
+	.sudokuTable {
+		width: 290px;
+		height: 290px;
 	}
 
 	.notes {

@@ -6,9 +6,9 @@ export default function SkeletonSudokuBoard() {
 			<tbody>
 				{
 					Array.from({ length: 9 }, (_, row) => (
-						<tr className={styles.box} key={row} id={`row-${row + 1}`}>
+						<tr className={styles.column} key={row} id={`row-${row + 1}`}>
 							{Array.from({ length: 9 }, (_, col) => (
-								<td className={`${styles.column} p-0`} key={col}>
+								<td className={`${styles.box} p-0`} key={col}>
 									<input className={styles.cell} disabled />
 								</td>
 							))}
