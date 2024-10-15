@@ -30,7 +30,7 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 	useEffect(() => {
 		if (isPaused) {
 			pause();
-		} else {
+		} else if (!loading) {
 			start();
 		}
 	}, [isPaused]);
@@ -41,11 +41,11 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 		}
 	};
 
-	const handleNewGame = () => {
+	const handleNewGame = async () => {
 		setIsPaused(false);
 		reset();
 		try {
-			fetchNewBoard();
+			await fetchNewBoard();
 		} catch (e) {
 			alert('Error fetching board: ', e)
 		}

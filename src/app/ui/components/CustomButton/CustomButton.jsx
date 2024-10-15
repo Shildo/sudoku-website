@@ -1,3 +1,5 @@
+"use client"
+
 import styles from './CustomButton.module.scss';
 import { useState } from 'react';
 

@@ -1,7 +1,7 @@
 "use client";
 
 import styles from './page.module.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import SudokuBoard from './ui/components/SudokuBoard/SudokuBoard';
 import SkeletonSudokuBoard from './ui/components/SkeletonSudokuBoard/SkeletonSudokuBoard';
 import NavBar from './ui/components/NavBar/NavBar';
@@ -13,8 +13,6 @@ export default function Home() {
 	const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
 	const [loading, setLoading] = useState(true);
 	const [isNotesMode, setIsNotesMode] = useState(false);
-
-	const controllerRef = useRef(null);
 
 	const eraseNumber = () => {
 		if (selectedCell.row !== null && selectedCell.col !== null) {
@@ -31,38 +29,7 @@ export default function Home() {
 			setIsNotesMode(prev => !prev);
 	}
 
-	const boardOptions = { eraseNumber, takeNotes }
-
-	const fetchBoard = async () => {
-
-		if (controllerRef.current) {
-			controllerRef.current.abort();
-		}
-
-		const newController = new AbortController();
-		controllerRef.current = newController;
-
-		try {
-			setLoading(true);
-			const response = await fetch("https://sudoku-api.vercel.app/api/dosuku?query={newboard(limit:1){grids{value}}}", {
-				signal: newController.signal,
-			});
-			const board = await response.json();
-			const data = board.newboard.grids[0].value;
-
-			setInitialBoard(data);
-			setEditableBoard(initializeBoard(data));
-		} catch (error) {
-			if (error.name === 'AbortError') {
-				console.log('Fetch aborted');
-			}
-			console.error('Error fetching the board: ', error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleCellUpdate = (row, col, number) => {
+	const handleCellUpdate = useCallback((row, col, number) => {
 		if (initialBoard[row][col] === 0) {
 			const newBoard = [...editableBoard];
 			if (isNotesMode) {
@@ -76,7 +43,7 @@ export default function Home() {
 			}
 			setEditableBoard(newBoard);
 		}
-	};
+	}, [initialBoard, editableBoard, isNotesMode]);
 
 	const initializeBoard = (data) => {
 		return data.map(row =>
@@ -87,14 +54,25 @@ export default function Home() {
 		);
 	};
 
+	const fetchData = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch('/api/new-board');
+			if (!response.ok)
+				throw new Error('Network response was not ok')
+			const newBoardData = await response.json();
+			setInitialBoard(newBoardData);
+			setEditableBoard(initializeBoard(newBoardData));
+		} catch (error) {
+			console.error("Error fetching new board: ", error);
+			alert("Failed to fetch a new Sudoku board. Please try again.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	useEffect(() => {
-		fetchBoard();
-		return () => {
-			if (controllerRef.current) {
-				controllerRef.current.abort();
-				controllerRef.current = null;
-			}
-		};
+		fetchData();
 	}, []);
 
 	return (
@@ -116,8 +94,8 @@ export default function Home() {
 					loading={loading}
 					selectedCell={selectedCell}
 					handleCellUpdate={handleCellUpdate}
-					fetchNewBoard={fetchBoard}
-					boardOptions={boardOptions}
+					fetchNewBoard={fetchData}
+					boardOptions={{ eraseNumber, takeNotes }}
 					isNotesMode={isNotesMode}
 				/>
 			</div>
