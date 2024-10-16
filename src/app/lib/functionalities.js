@@ -1,4 +1,6 @@
-export const solutionCache = {};
+import NodeCache from "node-cache";
+
+const cache = new NodeCache({ stdTTL: 0, checkperiod: 120 });
 
 export async function fetchBoard() {
 	let boardData = [];
@@ -9,8 +11,7 @@ export async function fetchBoard() {
 		);
 		const newBoard = await response.json();
 		boardData = newBoard.newboard.grids[0].value;
-		solutionCache['latestSolution'] = newBoard.newboard.grids[0].solution;
-
+		cache.set('latestSolution', newBoard.newboard.grids[0].solution);
 	} catch (error) {
 		console.error('Error fetching the board: ', error);
 	}
@@ -26,4 +27,8 @@ export function checkSolution(board, solution) {
 		}
 	}
 	return true;
+}
+
+export function getSolution(key) {
+	return cache.get(key);
 }
