@@ -5,12 +5,15 @@ export async function POST(req) {
 		const board = await req.json();
 
 		const solution = solutionCache['latestSolution'];
+		console.log(solution);
 
 		if (!solution) {
 			return new Response("No solution available", { status: 500 });
 		}
 
 		const isCorrect = checkSolution(board, solution);
+
+		console.log(isCorrect);
 
 		return new Response(JSON.stringify({ isCorrect }), {
 			status: 200,

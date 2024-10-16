@@ -36,11 +36,11 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 			if (!response.ok)
 				throw new Error('Network response was not ok');
 			const ok = await response.json();
-			if (ok)
+			if (ok.isCorrect) {
 				setSudokuFinished(true);
+			}
 		} catch (error) {
 			console.error("Error checking the board: ", error);
-			alert("Failed check the Sudoku board. Please try again.");
 		}
 	}
 
