@@ -3,7 +3,7 @@ import { getSudoku } from "sudoku-gen";
 
 const cache = new NodeCache({ stdTTL: 0, checkperiod: 120 });
 
-export function fetchBoard() {
+export async function fetchBoard() {
 	const { puzzle, solution, difficulty } = getSudoku();
 
 	const puzzleArray = puzzle.split('').map(val => (val === '-' ? 0 : parseInt(val)));

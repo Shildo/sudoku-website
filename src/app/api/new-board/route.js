@@ -1,7 +1,7 @@
 import { fetchBoard } from '@/app/lib/functionalities';
 
-export function GET(req) {
-	const board = fetchBoard();
+export async function GET(req) {
+	const board = await fetchBoard();
 	return new Response(JSON.stringify(board), {
 		status: 200,
 		headers: {
