@@ -5,7 +5,7 @@ export async function POST(req) {
 	try {
 		const board = await req.json();
 
-		const solution = getSolution('latestSolution');
+		const solution = getSolution('solution');
 
 		if (!solution) {
 			return new Response("No solution available", { status: 500 });

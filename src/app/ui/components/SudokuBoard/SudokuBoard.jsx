@@ -8,15 +8,49 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 
 	const [focusedCell, setFocusedCell] = useState({ row: null, col: null });
 	const [sudokuFinished, setSudokuFinished] = useState(false);
+	const [highlightedCells, setHighlightedCells] = useState([]);
 
 	const handleKeyDown = useCallback((event, row, col) => {
 		const key = event.key;
+		const number = parseInt(key);
+
 		if (/[1-9]/.test(key)) {
-			handleCellUpdate(row, col, parseInt(key));
+			handleCellUpdate(row, col, number);
+
+			const newHighlights = [];
+
+			//check row
+			for (let c = 0; c < editableBoard[row].length; c++) {
+				if (c !== col && editableBoard[row][c].value === number) {
+					newHighlights.push({ row, col: c });
+				}
+			}
+
+			//check col
+			for (let r = 0; r < editableBoard.length; r++) {
+				if (r !== row && editableBoard[r][col].value === number) {
+					newHighlights.push({ row: r, col });
+				}
+			}
+
+			//check 3x3
+			const startRow = Math.floor(row / 3) * 3;
+			const startCol = Math.floor(col / 3) * 3;
+			for (let r = startRow; r < startRow + 3; r++) {
+				for (let c = startCol; c < startCol + 3; c++) {
+					if ((r !== row || c !== col) && editableBoard[r][c].value === number) {
+						newHighlights.push({ row: r, col: c });
+					}
+				}
+			}
+
+			setHighlightedCells(newHighlights);
+
 		} else if (key === 'Backspace' || key === 'Delete') {
 			handleCellUpdate(row, col, 0);
+			setHighlightedCells([]);
 		}
-	}, [handleCellUpdate]);
+	}, [editableBoard, handleCellUpdate]);
 
 	const handleCellClick = useCallback((row, col) => {
 		setSelectedCell({ row, col });
@@ -37,6 +71,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 				throw new Error('Network response was not ok');
 			const ok = await response.json();
 			if (ok.isCorrect) {
+				setFocusedCell({ row: null, col: null });
 				setSudokuFinished(true);
 			}
 		} catch (error) {
@@ -59,7 +94,12 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 							{row.map((cell, colIndex) => {
 								const isInitialValue = initialBoard[rowIndex][colIndex] !== 0;
 								const isFocused = focusedCell && focusedCell.row === rowIndex && focusedCell.col === colIndex;
-								const cellClasses = `${styles.cell} ${isInitialValue ? styles.initial : styles.editable} ${isFocused ? styles.focused : ''}`;
+								const cellClasses = `
+									${styles.cell} 
+									${isInitialValue ? styles.initial : styles.editable} 
+									${isFocused ? styles.focused : ''} 
+									${highlightedCells.some(cell => cell.row === rowIndex && cell.col === colIndex) ? styles.highlight : ''}
+								`;
 
 								return (
 									<td key={colIndex} className={`${styles.box} p-0`}>
