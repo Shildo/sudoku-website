@@ -1,5 +1,7 @@
 import { fetchBoard } from '@/app/lib/functionalities';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
 	const board = await fetchBoard();
 	return new Response(JSON.stringify(board), {
