@@ -20,6 +20,11 @@
 	user-select: none;
 	width: 100%;
 	height: 100%;
+
+	&:focus {
+		outline: none;
+		background-color: var(--cellFocus);
+	}
 }
 
 .highlight {
@@ -65,11 +70,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-
-.focused {
-	background-color: var(--cellFocus);
-	outline: none;
 }
 
 @media (max-width: 600px) {

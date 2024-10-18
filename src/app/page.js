@@ -35,15 +35,18 @@ export default function Home() {
 	const handleCellUpdate = useCallback((row, col, number) => {
 		if (initialBoard[row][col] === 0) {
 			const newBoard = [...editableBoard];
+
 			if (isNotesMode) {
 				const notes = newBoard[row][col].notes.includes(number)
 					? newBoard[row][col].notes.filter(n => n !== number)
 					: [...newBoard[row][col].notes, number];
 				newBoard[row][col].notes = notes;
+				newBoard[row][col].value = 0;
 			} else {
 				newBoard[row][col].value = number;
 				newBoard[row][col].notes = [];
 			}
+
 			setEditableBoard(newBoard);
 		}
 	}, [initialBoard, editableBoard, isNotesMode]);
@@ -110,6 +113,7 @@ export default function Home() {
 							setSelectedCell={setSelectedCell}
 							handleCellUpdate={handleCellUpdate}
 							isNotesMode={isNotesMode}
+							eraseNumber={eraseNumber}
 						/>
 					)}
 				</div>
