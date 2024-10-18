@@ -1,17 +1,10 @@
 import { checkSolution } from '@/app/lib/functionalities';
-import { getSolution } from '@/app/lib/functionalities';
 
 export async function POST(req) {
 	try {
 		const board = await req.json();
 
-		const solution = getSolution('solution');
-
-		if (!solution) {
-			return new Response("No solution available", { status: 500 });
-		}
-
-		const isCorrect = checkSolution(board, solution);
+		const isCorrect = checkSolution(board);
 
 		return new Response(JSON.stringify({ isCorrect }), {
 			status: 200,

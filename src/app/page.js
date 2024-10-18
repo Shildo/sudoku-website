@@ -13,6 +13,9 @@ export default function Home() {
 	const [selectedCell, setSelectedCell] = useState({ row: null, col: null });
 	const [loading, setLoading] = useState(true);
 	const [isNotesMode, setIsNotesMode] = useState(false);
+	const [difficulty, setDifficulty] = useState('');
+
+	const difficulties = ['Easy', 'Medium', 'Hard', 'Expert', ''];
 
 	const eraseNumber = () => {
 		if (selectedCell.row !== null && selectedCell.col !== null) {
@@ -57,7 +60,10 @@ export default function Home() {
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			const response = await fetch('/api/new-board');
+			const response = await fetch(`/api/new-board?difficulty=${encodeURIComponent(difficulty.toLowerCase())}`, {
+				method: 'GET',
+			});
+
 			if (!response.ok)
 				throw new Error('Network response was not ok')
 			const newBoardData = await response.json();
@@ -75,21 +81,38 @@ export default function Home() {
 		fetchData();
 	}, []);
 
+	const handleDifficultySelect = (dif) => {
+		setDifficulty(dif);
+	}
+
 	return (
 		<main className={styles.main}>
 			<NavBar />
 			<div className={styles.pageContent}>
-				{loading ? (
-					<SkeletonSudokuBoard />
-				) : (
-					<SudokuBoard
-						initialBoard={initialBoard}
-						editableBoard={editableBoard}
-						setSelectedCell={setSelectedCell}
-						handleCellUpdate={handleCellUpdate}
-						isNotesMode={isNotesMode}
-					/>
-				)}
+				<div>
+					<div className={styles.difficultyContainer}>
+						{difficulties.map((dif) => (
+							<h4
+								key={dif}
+								onClick={() => handleDifficultySelect(dif)}
+								className={`${difficulty === dif ? styles.selected : ''}`}
+							>
+								{dif === '' ? 'Random' : dif}
+							</h4>
+						))}
+					</div>
+					{loading ? (
+						<SkeletonSudokuBoard />
+					) : (
+						<SudokuBoard
+							initialBoard={initialBoard}
+							editableBoard={editableBoard}
+							setSelectedCell={setSelectedCell}
+							handleCellUpdate={handleCellUpdate}
+							isNotesMode={isNotesMode}
+						/>
+					)}
+				</div>
 				<Interacteables
 					loading={loading}
 					selectedCell={selectedCell}

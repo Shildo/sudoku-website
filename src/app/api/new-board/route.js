@@ -3,7 +3,9 @@ import { fetchBoard } from '@/app/lib/functionalities';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req) {
-	const board = await fetchBoard();
+	const url = new URL(req.url);
+	const difficulty = url.searchParams.get('difficulty') || '';
+	const board = await fetchBoard(difficulty);
 	return new Response(JSON.stringify(board), {
 		status: 200,
 		headers: {

@@ -19,21 +19,18 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 
 			const newHighlights = [];
 
-			//check row
 			for (let c = 0; c < editableBoard[row].length; c++) {
 				if (c !== col && editableBoard[row][c].value === number) {
 					newHighlights.push({ row, col: c });
 				}
 			}
 
-			//check col
 			for (let r = 0; r < editableBoard.length; r++) {
 				if (r !== row && editableBoard[r][col].value === number) {
 					newHighlights.push({ row: r, col });
 				}
 			}
 
-			//check 3x3
 			const startRow = Math.floor(row / 3) * 3;
 			const startCol = Math.floor(col / 3) * 3;
 			for (let r = startRow; r < startRow + 3; r++) {

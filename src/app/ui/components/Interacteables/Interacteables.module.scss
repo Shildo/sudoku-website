@@ -16,6 +16,13 @@
 			align-items: center;
 			gap: 10px;
 			width: 100%;
+
+			.newGameButton {
+				height: 50px;
+				width: 150px;
+				padding: 10px 20px;
+				font-size: 20px;
+			}
 		}
 
 		.optionButtons {
@@ -29,12 +36,7 @@
 			}
 		}
 
-		.newGameButton {
-			height: 50px;
-			width: 150px;
-			padding: 10px 20px;
-			font-size: 20px;
-		}
+
 	}
 
 	.notesContainer {

@@ -10,6 +10,22 @@
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+
+	.difficultyContainer {
+		display: flex;
+		font-size: 18px;
+		gap: 20px;
+		font-weight: 600;
+		color: var(--difficulty);
+
+		h4:hover {
+			cursor: pointer;
+		}
+
+		.selected {
+			color: var(--difficultySelected);
+		}
+	}
 }
 
 @media (max-width: 1000px) {
