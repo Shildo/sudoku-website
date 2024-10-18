@@ -1,8 +1,13 @@
+import NodeCache from "node-cache";
 import { getSudoku } from "sudoku-gen";
+
+const cache = new NodeCache({ stdTTL: 1, checkperiod: 120 });
 
 export async function fetchBoard(difficulty) {
 
-	const { puzzle } = getSudoku(difficulty);
+	const { puzzle, solution } = getSudoku(difficulty);
+
+	cache.set('solution', solution);
 
 	const puzzleArray = puzzle.split('').map(val => (val === '-' ? 0 : parseInt(val)));
 	const formattedPuzzle = [];
@@ -12,6 +17,14 @@ export async function fetchBoard(difficulty) {
 }
 
 export function checkSolution(board) {
+
+	const solution = cache.get('solution');
+	if (solution) {
+		console.log('Volvio con solution');
+		return board.flat().join('') === solution;
+	}
+
+
 	function isValidGroup(seen, num) {
 		if (num < 1 || num > 9 || seen.has(num)) {
 			return false;
