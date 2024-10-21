@@ -47,6 +47,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 			if (!response.ok)
 				throw new Error('Network response was not ok');
 			const ok = await response.json();
+			console.log(ok);
 			if (ok.isCorrect) {
 				document.activeElement.blur();
 				setSudokuFinished(true);

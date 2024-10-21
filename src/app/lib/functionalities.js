@@ -21,5 +21,5 @@ export function checkSolution(board) {
 	if (solution) {
 		return board.flat().join('') === solution;
 	}
-	return true;
+	return false;
 }
