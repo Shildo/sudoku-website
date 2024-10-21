@@ -1,4 +1,4 @@
-export default function PencilSvg(props) {
+export default function PauseSvg(props) {
 	return (
 		<svg
 			width={20}
