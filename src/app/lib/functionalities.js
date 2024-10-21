@@ -1,7 +1,7 @@
 import NodeCache from "node-cache";
 import { getSudoku } from "sudoku-gen";
 
-const cache = new NodeCache({ stdTTL: 1, checkperiod: 120 });
+const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
 
 export async function fetchBoard(difficulty) {
 
