@@ -80,8 +80,22 @@ export default function Home() {
 		}
 	};
 
+	const fetchAndIgnoreData = async () => {
+		try {
+			await fetch(`/api/new-board?difficulty=${encodeURIComponent(difficulty.toLowerCase())}`, {
+				method: 'GET',
+			});
+		} catch (error) {
+			console.error("Error in first fetch (ignored): ", error);
+		}
+	};
+
 	useEffect(() => {
-		fetchData();
+		const fetchDataTwice = async () => {
+			await fetchAndIgnoreData();
+			await fetchData();
+		}
+		fetchDataTwice();
 	}, []);
 
 	const handleDifficultySelect = (dif) => {
@@ -95,13 +109,13 @@ export default function Home() {
 				<div>
 					<div className={styles.difficultyContainer}>
 						{difficulties.map((dif) => (
-							<h4
+							<button
 								key={dif}
 								onClick={() => handleDifficultySelect(dif)}
 								className={`${difficulty === dif ? styles.selected : ''}`}
 							>
 								{dif === '' ? 'Random' : dif}
-							</h4>
+							</button>
 						))}
 					</div>
 					{loading ? (

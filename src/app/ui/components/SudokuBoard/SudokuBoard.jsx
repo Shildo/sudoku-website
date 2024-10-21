@@ -92,9 +92,9 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 												cell.notes.length > 0 ? (
 													<div className={styles.notes}>
 														{Array.from({ length: 9 }, (_, i) => (
-															<div key={i} className={styles.note}>
+															<span key={i} className={styles.note}>
 																{cell.notes.includes(i + 1) ? i + 1 : ''}
-															</div>
+															</span>
 														))}
 													</div>
 												) : ''
