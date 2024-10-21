@@ -18,8 +18,5 @@ export async function fetchBoard(difficulty) {
 
 export function checkSolution(board) {
 	const solution = cache.get('solution');
-	if (solution) {
-		return board.flat().join('') === solution;
-	}
-	return { solution };
+	return board.flat().join('') === solution;
 }
