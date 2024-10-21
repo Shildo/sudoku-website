@@ -6,6 +6,7 @@ import SudokuFinishedCartel from '../SudokuFinishedCartel/SudokuFinishedCartel';
 
 export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, handleCellUpdate, eraseNumber }) {
 	const [sudokuFinished, setSudokuFinished] = useState(false);
+	const [focusedCell, setFocusedCell] = useState({ row: null, col: null });
 
 	const handleKeyDown = useCallback((event, row, col) => {
 		const key = event.key;
@@ -64,6 +65,60 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 		}
 	}, [editableBoard]);
 
+	useEffect(() => {
+		if (focusedCell.row === null || focusedCell.col === null) return;
+
+		const highlightCells = () => {
+			const boxRowStart = Math.floor(focusedCell.row / 3) * 3;
+			const boxColStart = Math.floor(focusedCell.col / 3) * 3;
+
+			for (let i = 0; i < 9; i++) {
+				if (i !== focusedCell.col) {
+					document.getElementById(`${focusedCell.row}-${i}`).classList.add(styles.highlight);
+				}
+				if (i !== focusedCell.row) {
+					document.getElementById(`${i}-${focusedCell.col}`).classList.add(styles.highlight);
+				}
+			}
+
+			for (let i = boxRowStart; i < boxRowStart + 3; i++) {
+				for (let j = boxColStart; j < boxColStart + 3; j++) {
+					if (!(i === focusedCell.row && j === focusedCell.col)) {
+						document.getElementById(`${i}-${j}`).classList.add(styles.highlight);
+					}
+				}
+			}
+		};
+
+		const removeHighlight = () => {
+			for (let i = 0; i < 9; i++) {
+				document.getElementById(`${focusedCell.row}-${i}`).classList.remove(styles.highlight);
+				document.getElementById(`${i}-${focusedCell.col}`).classList.remove(styles.highlight);
+			}
+
+			const boxRowStart = Math.floor(focusedCell.row / 3) * 3;
+			const boxColStart = Math.floor(focusedCell.col / 3) * 3;
+			for (let i = boxRowStart; i < boxRowStart + 3; i++) {
+				for (let j = boxColStart; j < boxColStart + 3; j++) {
+					document.getElementById(`${i}-${j}`).classList.remove(styles.highlight);
+				}
+			}
+		};
+
+		removeHighlight();
+		highlightCells();
+
+		return () => removeHighlight();
+	}, [focusedCell]);
+
+	const handleFocus = (row, col) => {
+		setFocusedCell({ row, col });
+	};
+
+	const handleBlur = () => {
+		setFocusedCell({ row: null, col: null });
+	};
+
 	return (
 		<div className={styles.allContainer}>
 			<table className={styles.sudokuTable}>
@@ -74,7 +129,8 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 								const isInitialValue = initialBoard[rowIndex][colIndex] !== 0;
 								const cellClasses = `
 									${styles.cell} 
-									${isInitialValue ? styles.initial : styles.editable} 
+									${isInitialValue ? styles.initial : styles.editable}
+									${focusedCell.row === rowIndex && focusedCell.col === colIndex ? styles.focused : ''}
 								`;
 
 								return (
@@ -82,9 +138,11 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 										<div
 											id={`${rowIndex}-${colIndex}`}
 											className={cellClasses}
-											tabIndex={!isInitialValue ? 0 : ''}
+											tabIndex='0'
 											onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
 											onClick={() => handleCellClick(rowIndex, colIndex)}
+											onFocus={() => handleFocus(rowIndex, colIndex)}
+											onBlur={() => handleBlur()}
 										>
 											{cell.value !== 0 ? (
 												cell.value
