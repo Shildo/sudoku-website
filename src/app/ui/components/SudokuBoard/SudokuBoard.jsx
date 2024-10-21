@@ -37,7 +37,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 	const boardCheck = async () => {
 		try {
 			const boardValues = editableBoard.map(row => row.map(cell => cell.value));
-			const response = await fetch('/api/board-check', {
+			const response = await fetch('/api/check-solution', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -50,6 +50,8 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 			if (ok.isCorrect) {
 				document.activeElement.blur();
 				setSudokuFinished(true);
+			} else {
+				console.log('Solution is incorrect. Try again!');
 			}
 		} catch (error) {
 			console.error("Error checking the board: ", error);
