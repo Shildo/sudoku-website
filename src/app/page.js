@@ -32,6 +32,32 @@ export default function Home() {
 			setIsNotesMode(prev => !prev);
 	}
 
+	useEffect(() => {
+		const handleKeyDown = (event) => {
+			const key = event.key;
+			const number = parseInt(key);
+
+			if (selectedCell.row !== null && selectedCell.col !== null) {
+				if (/[1-9]/.test(key)) {
+					handleCellUpdate(selectedCell.row, selectedCell.col, number);
+				} else if (key === 'Backspace' || key === 'Delete') {
+					handleCellUpdate(selectedCell.row, selectedCell.col, 0);
+				} else if (key === 'Tab') {
+					const cellElement = document.getElementById(`${row}-${col}`);
+					if (cellElement) {
+						cellElement.focus();
+					}
+				}
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [selectedCell]);
+
 	const handleCellUpdate = useCallback((row, col, number) => {
 		if (initialBoard[row][col] === 0) {
 			const newBoard = [...editableBoard];

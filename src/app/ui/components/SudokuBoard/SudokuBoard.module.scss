@@ -23,8 +23,11 @@
 
 	&:focus {
 		outline: none;
-		background-color: var(--cellFocus);
 	}
+}
+
+.focused {
+	background-color: var(--cellFocus);
 }
 
 .highlight {

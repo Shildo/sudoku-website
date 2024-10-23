@@ -1,38 +1,16 @@
 "use client"
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import styles from './SudokuBoard.module.scss'
 import SudokuFinishedCartel from '../SudokuFinishedCartel/SudokuFinishedCartel';
 
-export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, handleCellUpdate, eraseNumber }) {
+export default function Sudoku({ editableBoard, initialBoard, setSelectedCell }) {
 	const [sudokuFinished, setSudokuFinished] = useState(false);
 	const [focusedCell, setFocusedCell] = useState({ row: null, col: null });
 
-	const handleKeyDown = useCallback((event, row, col) => {
-		const key = event.key;
-		const number = parseInt(key);
-
-		if (/[1-9]/.test(key)) {
-			handleCellUpdate(row, col, number);
-
-		} else if (key === 'Backspace' || key === 'Delete') {
-			handleCellUpdate(row, col, 0);
-			eraseNumber();
-		} else if (key === 'Tab') {
-			const cellElement = document.getElementById(`${row}-${col}`);
-			if (cellElement) {
-				cellElement.focus();
-			}
-		}
-	}, [editableBoard, handleCellUpdate]);
-
 	const handleCellClick = useCallback((row, col) => {
 		setSelectedCell({ row, col });
-
-		const cellElement = document.getElementById(`${row}-${col}`);
-		if (cellElement) {
-			cellElement.focus();
-		}
+		setFocusedCell({ row, col });
 	}, [setSelectedCell]);
 
 	const boardCheck = async () => {
@@ -49,7 +27,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 				throw new Error('Network response was not ok');
 			const ok = await response.json();
 			if (ok.isCorrect) {
-				document.activeElement.blur();
+				setHighlightedCell({ row: null, col: null });
 				setSudokuFinished(true);
 			} else {
 				console.log('Solution is incorrect. Try again!');
@@ -65,58 +43,35 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 		}
 	}, [editableBoard]);
 
-	useEffect(() => {
-		if (focusedCell.row === null || focusedCell.col === null) return;
+	const highlightedCells = useMemo(() => {
+		if (focusedCell.row === null || focusedCell.col === null) return new Set();
 
-		const highlightCells = () => {
-			const boxRowStart = Math.floor(focusedCell.row / 3) * 3;
-			const boxColStart = Math.floor(focusedCell.col / 3) * 3;
+		const boxRowStart = Math.floor(focusedCell.row / 3) * 3;
+		const boxColStart = Math.floor(focusedCell.col / 3) * 3;
+		const highlightSet = new Set();
 
-			for (let i = 0; i < 9; i++) {
-				if (i !== focusedCell.col) {
-					document.getElementById(`${focusedCell.row}-${i}`).classList.add(styles.highlight);
-				}
-				if (i !== focusedCell.row) {
-					document.getElementById(`${i}-${focusedCell.col}`).classList.add(styles.highlight);
-				}
+		for (let i = 0; i < 9; i++) {
+			if (i !== focusedCell.col) {
+				highlightSet.add(`${focusedCell.row}-${i}`);
 			}
-
-			for (let i = boxRowStart; i < boxRowStart + 3; i++) {
-				for (let j = boxColStart; j < boxColStart + 3; j++) {
-					if (!(i === focusedCell.row && j === focusedCell.col)) {
-						document.getElementById(`${i}-${j}`).classList.add(styles.highlight);
-					}
-				}
+			if (i !== focusedCell.row) {
+				highlightSet.add(`${i}-${focusedCell.col}`);
 			}
-		};
+		}
 
-		const removeHighlight = () => {
-			for (let i = 0; i < 9; i++) {
-				document.getElementById(`${focusedCell.row}-${i}`).classList.remove(styles.highlight);
-				document.getElementById(`${i}-${focusedCell.col}`).classList.remove(styles.highlight);
-			}
-
-			const boxRowStart = Math.floor(focusedCell.row / 3) * 3;
-			const boxColStart = Math.floor(focusedCell.col / 3) * 3;
-			for (let i = boxRowStart; i < boxRowStart + 3; i++) {
-				for (let j = boxColStart; j < boxColStart + 3; j++) {
-					document.getElementById(`${i}-${j}`).classList.remove(styles.highlight);
+		for (let i = boxRowStart; i < boxRowStart + 3; i++) {
+			for (let j = boxColStart; j < boxColStart + 3; j++) {
+				if (!(i === focusedCell.row && j === focusedCell.col)) {
+					highlightSet.add(`${i}-${j}`);
 				}
 			}
-		};
+		}
 
-		removeHighlight();
-		highlightCells();
-
-		return () => removeHighlight();
+		return highlightSet;
 	}, [focusedCell]);
 
-	const handleFocus = (row, col) => {
-		setFocusedCell({ row, col });
-	};
-
-	const handleBlur = () => {
-		setFocusedCell({ row: null, col: null });
+	const isHighlighted = (row, col) => {
+		return highlightedCells.has(`${row}-${col}`);
 	};
 
 	return (
@@ -130,7 +85,8 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 								const cellClasses = `
 									${styles.cell} 
 									${isInitialValue ? styles.initial : styles.editable}
-									${focusedCell.row === rowIndex && focusedCell.col === colIndex ? styles.focused : ''}
+									${isHighlighted(rowIndex, colIndex) ? styles.highlight : ''}
+                 					${focusedCell.row === rowIndex && focusedCell.col === colIndex ? styles.focused : ''}								
 								`;
 
 								return (
@@ -139,10 +95,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell, h
 											id={`${rowIndex}-${colIndex}`}
 											className={cellClasses}
 											tabIndex='0'
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
 											onClick={() => handleCellClick(rowIndex, colIndex)}
-											onFocus={() => handleFocus(rowIndex, colIndex)}
-											onBlur={() => handleBlur()}
 										>
 											{cell.value !== 0 ? (
 												cell.value
