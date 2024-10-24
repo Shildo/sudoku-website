@@ -27,7 +27,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell })
 				throw new Error('Network response was not ok');
 			const ok = await response.json();
 			if (ok.isCorrect) {
-				setHighlightedCell({ row: null, col: null });
+				setFocusedCell({ row: null, col: null });
 				setSudokuFinished(true);
 			} else {
 				console.log('Solution is incorrect. Try again!');
