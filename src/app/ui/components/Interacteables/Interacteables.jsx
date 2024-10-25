@@ -13,8 +13,7 @@ import PauseSvg from '@/public/svg/PauseSvg';
 import PlaySvg from '@/public/svg/PlaySvg';
 import TrashSvg from '@/public/svg/TrashSvg';
 
-export default function Interacteables({ loading, selectedCell, handleCellUpdate, fetchNewBoard, boardOptions, isNotesMode }) {
-	const [isPaused, setIsPaused] = useState(false);
+export default function Interacteables({ loading, selectedCell, handleCellUpdate, fetchNewBoard, boardOptions, isNotesMode, isPaused, setIsPaused }) {
 
 	const { hours, minutes, seconds, reset, pause, start } = useStopwatch({ autoStart: false });
 

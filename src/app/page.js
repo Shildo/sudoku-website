@@ -14,6 +14,7 @@ export default function Home() {
 	const [loading, setLoading] = useState(true);
 	const [isNotesMode, setIsNotesMode] = useState(false);
 	const [difficulty, setDifficulty] = useState('');
+	const [isPaused, setIsPaused] = useState(false);
 
 	const difficulties = ['Easy', 'Medium', 'Hard', 'Expert', ''];
 
@@ -34,19 +35,20 @@ export default function Home() {
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {
+			setIsPaused(false);
+
 			const key = event.key;
 			const number = parseInt(key);
+
+			if (/^F[1-9]$|^F1[0-2]$/.test(key)) {
+				return;
+			}
 
 			if (selectedCell.row !== null && selectedCell.col !== null) {
 				if (/[1-9]/.test(key)) {
 					handleCellUpdate(selectedCell.row, selectedCell.col, number);
 				} else if (key === 'Backspace' || key === 'Delete') {
 					handleCellUpdate(selectedCell.row, selectedCell.col, 0);
-				} else if (key === 'Tab') {
-					const cellElement = document.getElementById(`${row}-${col}`);
-					if (cellElement) {
-						cellElement.focus();
-					}
 				}
 			}
 		};
@@ -56,7 +58,7 @@ export default function Home() {
 		return () => {
 			window.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [selectedCell]);
+	}, [selectedCell, isNotesMode]);
 
 	const handleCellUpdate = useCallback((row, col, number) => {
 		if (initialBoard[row][col] === 0) {
@@ -87,6 +89,7 @@ export default function Home() {
 	};
 
 	const fetchData = async () => {
+		setSelectedCell({ row: null, col: null });
 		setLoading(true);
 		try {
 			const response = await fetch(`/api/new-board?difficulty=${encodeURIComponent(difficulty.toLowerCase())}`, {
@@ -106,22 +109,9 @@ export default function Home() {
 		}
 	};
 
-	const fetchAndIgnoreData = async () => {
-		try {
-			await fetch(`/api/new-board?difficulty=${encodeURIComponent(difficulty.toLowerCase())}`, {
-				method: 'GET',
-			});
-		} catch (error) {
-			console.error("Error in first fetch (ignored): ", error);
-		}
-	};
 
 	useEffect(() => {
-		const fetchDataTwice = async () => {
-			await fetchAndIgnoreData();
-			await fetchData();
-		}
-		fetchDataTwice();
+		fetchData();
 	}, []);
 
 	const handleDifficultySelect = (dif) => {
@@ -144,16 +134,14 @@ export default function Home() {
 							</button>
 						))}
 					</div>
-					{loading ? (
+					{loading || isPaused ? (
 						<SkeletonSudokuBoard />
 					) : (
 						<SudokuBoard
 							initialBoard={initialBoard}
 							editableBoard={editableBoard}
 							setSelectedCell={setSelectedCell}
-							handleCellUpdate={handleCellUpdate}
-							isNotesMode={isNotesMode}
-							eraseNumber={eraseNumber}
+							selectedCell={selectedCell}
 						/>
 					)}
 				</div>
@@ -164,6 +152,8 @@ export default function Home() {
 					fetchNewBoard={fetchData}
 					boardOptions={{ eraseNumber, takeNotes }}
 					isNotesMode={isNotesMode}
+					isPaused={isPaused}
+					setIsPaused={setIsPaused}
 				/>
 			</div>
 		</main>

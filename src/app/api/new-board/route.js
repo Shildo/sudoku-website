@@ -1,4 +1,4 @@
-import { fetchBoard } from '@/app/lib/functionalities';
+import { fetchBoard } from '@/app/lib/serverSideFunctions';
 
 export const dynamic = 'force-dynamic';
 

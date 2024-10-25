@@ -1,4 +1,4 @@
-import { checkSolution } from '@/app/lib/functionalities';
+import { checkSolution } from '@/app/lib/serverSideFunctions';
 
 export async function POST(req) {
 	try {

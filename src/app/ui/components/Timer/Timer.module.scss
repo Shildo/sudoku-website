@@ -5,6 +5,14 @@
 	text-align: center;
 	gap: 20px;
 
+	@media (max-width: 550px) {
+		gap: 10px;
+
+		.timer {
+			font-size: 14px;
+		}
+	}
+
 	.timer {
 		display: flex;
 		align-items: center;
@@ -22,15 +30,5 @@
 		height: 30px;
 		padding: 5px;
 		border-radius: 10px;
-	}
-}
-
-@media (max-width: 550px) {
-	.timerContainer {
-		gap: 10px !important;
-	}
-
-	.timer {
-		font-size: 14px;
 	}
 }

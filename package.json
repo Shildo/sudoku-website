@@ -15,12 +15,12 @@
     "react-dom": "^18",
     "react-timer-hook": "^3.0.7",
     "sass": "^1.79.4",
-    "sudoku-gen": "^1.0.2"
+    "sudoku-gen": "^1.0.2",
+    "tailwindcss": "^3.4.14"
   },
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "postcss": "^8"
   }
 }

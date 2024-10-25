@@ -4,13 +4,11 @@ import { useCallback, useEffect, useState, useMemo } from 'react';
 import styles from './SudokuBoard.module.scss'
 import SudokuFinishedCartel from '../SudokuFinishedCartel/SudokuFinishedCartel';
 
-export default function Sudoku({ editableBoard, initialBoard, setSelectedCell }) {
+export default function SudokuBoard({ editableBoard, initialBoard, setSelectedCell, selectedCell }) {
 	const [sudokuFinished, setSudokuFinished] = useState(false);
-	const [focusedCell, setFocusedCell] = useState({ row: null, col: null });
 
 	const handleCellClick = useCallback((row, col) => {
 		setSelectedCell({ row, col });
-		setFocusedCell({ row, col });
 	}, [setSelectedCell]);
 
 	const boardCheck = async () => {
@@ -27,7 +25,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell })
 				throw new Error('Network response was not ok');
 			const ok = await response.json();
 			if (ok.isCorrect) {
-				setFocusedCell({ row: null, col: null });
+				setSelectedCell({ row: null, col: null });
 				setSudokuFinished(true);
 			} else {
 				console.log('Solution is incorrect. Try again!');
@@ -44,31 +42,31 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell })
 	}, [editableBoard]);
 
 	const highlightedCells = useMemo(() => {
-		if (focusedCell.row === null || focusedCell.col === null) return new Set();
+		if (selectedCell.row === null || selectedCell.col === null) return new Set();
 
-		const boxRowStart = Math.floor(focusedCell.row / 3) * 3;
-		const boxColStart = Math.floor(focusedCell.col / 3) * 3;
+		const boxRowStart = Math.floor(selectedCell.row / 3) * 3;
+		const boxColStart = Math.floor(selectedCell.col / 3) * 3;
 		const highlightSet = new Set();
 
 		for (let i = 0; i < 9; i++) {
-			if (i !== focusedCell.col) {
-				highlightSet.add(`${focusedCell.row}-${i}`);
+			if (i !== selectedCell.col) {
+				highlightSet.add(`${selectedCell.row}-${i}`);
 			}
-			if (i !== focusedCell.row) {
-				highlightSet.add(`${i}-${focusedCell.col}`);
+			if (i !== selectedCell.row) {
+				highlightSet.add(`${i}-${selectedCell.col}`);
 			}
 		}
 
 		for (let i = boxRowStart; i < boxRowStart + 3; i++) {
 			for (let j = boxColStart; j < boxColStart + 3; j++) {
-				if (!(i === focusedCell.row && j === focusedCell.col)) {
+				if (!(i === selectedCell.row && j === selectedCell.col)) {
 					highlightSet.add(`${i}-${j}`);
 				}
 			}
 		}
 
 		return highlightSet;
-	}, [focusedCell]);
+	}, [selectedCell]);
 
 	const isHighlighted = (row, col) => {
 		return highlightedCells.has(`${row}-${col}`);
@@ -86,7 +84,7 @@ export default function Sudoku({ editableBoard, initialBoard, setSelectedCell })
 									${styles.cell} 
 									${isInitialValue ? styles.initial : styles.editable}
 									${isHighlighted(rowIndex, colIndex) ? styles.highlight : ''}
-                 					${focusedCell.row === rowIndex && focusedCell.col === colIndex ? styles.focused : ''}								
+                 					${selectedCell.row === rowIndex && selectedCell.col === colIndex ? styles.focused : ''}								
 								`;
 
 								return (

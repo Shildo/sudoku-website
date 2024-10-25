@@ -1,6 +1,7 @@
 .main {
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	height: 100vh;
 }
 
@@ -9,8 +10,11 @@
 	gap: 80px;
 	align-items: center;
 	justify-content: center;
-	height: 92vh;
-	margin-top: 8vh;
+
+	@media (max-width: 1000px) {
+		flex-direction: column;
+		gap: 15px;
+	}
 
 	.difficultyContainer {
 		display: flex;
@@ -19,27 +23,16 @@
 		font-weight: 600;
 		color: var(--difficulty);
 
+		@media (max-width: 450px) {
+			font-size: 14px;
+		}
+
+		@media (max-width: 320px) {
+			gap: 10px;
+		}
+
 		.selected {
 			color: var(--difficultySelected);
 		}
-	}
-}
-
-@media (max-width: 1000px) {
-	.pageContent {
-		flex-direction: column;
-		gap: 15px;
-	}
-}
-
-@media (max-width: 450px) {
-	.difficultyContainer {
-		font-size: 14px !important;
-	}
-}
-
-@media (max-width: 320px) {
-	.difficultyContainer {
-		gap: 10px !important;
 	}
 }
