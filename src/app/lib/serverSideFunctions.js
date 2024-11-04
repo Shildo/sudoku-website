@@ -1,13 +1,9 @@
-import NodeCache from "node-cache";
 import { getSudoku } from "sudoku-gen";
 
-const cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
 
 export async function fetchBoard(difficulty) {
 
-	const { puzzle, solution } = getSudoku(difficulty);
-
-	cache.set('solution', solution);
+	const { puzzle } = getSudoku(difficulty);
 
 	const puzzleArray = puzzle.split('').map(val => (val === '-' ? 0 : parseInt(val)));
 	const formattedPuzzle = [];
@@ -17,12 +13,6 @@ export async function fetchBoard(difficulty) {
 }
 
 export function checkSolution(board) {
-	const solution = cache.get('solution');
-
-	if (solution) {
-		return board.flat().join('') === solution;
-	}
-
 	const size = 9;
 	const boxSize = 3;
 
