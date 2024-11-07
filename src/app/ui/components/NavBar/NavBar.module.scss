@@ -1,5 +1,5 @@
 .navBar {
-	height: 8vh;
+	height: 70px;
 	width: 100%;
 	position: fixed;
 	display: flex;
@@ -29,6 +29,7 @@
 		transform: scale(1);
 		transition: transform .3s ease;
 		will-change: transform;
+		height: 75%;
 
 		.githubLink {
 			display: flex;

@@ -1,4 +1,4 @@
-import LabelSvg from '@/public/LabelSvg'
+import LabelSvg from '@/public/svg/LabelSvg'
 import styles from './SudokuFinishedCartel.module.scss'
 
 export default function SudokuFinishedCartel() {

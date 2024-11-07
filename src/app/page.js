@@ -6,6 +6,7 @@ import SudokuBoard from './ui/components/SudokuBoard/SudokuBoard';
 import SkeletonSudokuBoard from './ui/components/SkeletonSudokuBoard/SkeletonSudokuBoard';
 import NavBar from './ui/components/NavBar/NavBar';
 import Interacteables from './ui/components/Interacteables/Interacteables';
+import { fetchBoard } from './lib/boardFunctions';
 
 export default function Home() {
 	const [initialBoard, setInitialBoard] = useState([]);
@@ -39,6 +40,12 @@ export default function Home() {
 
 			const key = event.key;
 			const number = parseInt(key);
+			const directionOffsets = {
+				ArrowUp: { row: -1, col: 0 },
+				ArrowDown: { row: 1, col: 0 },
+				ArrowLeft: { row: 0, col: -1 },
+				ArrowRight: { row: 0, col: 1 }
+			}
 
 			if (/^F[1-9]$|^F1[0-2]$/.test(key)) {
 				return;
@@ -49,6 +56,12 @@ export default function Home() {
 					handleCellUpdate(selectedCell.row, selectedCell.col, number);
 				} else if (key === 'Backspace' || key === 'Delete') {
 					handleCellUpdate(selectedCell.row, selectedCell.col, 0);
+				} else if (key in directionOffsets) {
+					const { row: rowOffset, col: colOffset } = directionOffsets[key];
+					const newRow = Math.min(8, Math.max(0, selectedCell.row + rowOffset));
+					const newCol = Math.min(8, Math.max(0, selectedCell.col + colOffset));
+
+					setSelectedCell({ row: newRow, col: newCol });
 				}
 			}
 		};
@@ -88,25 +101,16 @@ export default function Home() {
 		);
 	};
 
-	const fetchData = async () => {
+	const fetchData = () => {
 		setSelectedCell({ row: null, col: null });
 		setLoading(true);
-		try {
-			const response = await fetch(`/api/new-board?difficulty=${encodeURIComponent(difficulty.toLowerCase())}`, {
-				method: 'GET',
-			});
 
-			if (!response.ok)
-				throw new Error('Network response was not ok')
-			const newBoardData = await response.json();
-			setInitialBoard(newBoardData);
-			setEditableBoard(initializeBoard(newBoardData));
-		} catch (error) {
-			console.error("Error fetching new board: ", error);
-			alert("Failed to fetch a new Sudoku board. Please try again.");
-		} finally {
-			setLoading(false);
-		}
+		const newBoard = fetchBoard(difficulty.toLowerCase());
+
+		setInitialBoard(newBoard);
+		setEditableBoard(initializeBoard(newBoard));
+
+		setLoading(false);
 	};
 
 

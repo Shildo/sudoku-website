@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import styles from './SudokuBoard.module.scss'
 import SudokuFinishedCartel from '../SudokuFinishedCartel/SudokuFinishedCartel';
+import { checkSolution } from '@/app/lib/boardFunctions';
 
 export default function SudokuBoard({ editableBoard, initialBoard, setSelectedCell, selectedCell }) {
 	const [sudokuFinished, setSudokuFinished] = useState(false);
@@ -11,27 +12,15 @@ export default function SudokuBoard({ editableBoard, initialBoard, setSelectedCe
 		setSelectedCell({ row, col });
 	}, [setSelectedCell]);
 
-	const boardCheck = async () => {
-		try {
-			const boardValues = editableBoard.map(row => row.map(cell => cell.value));
-			const response = await fetch('/api/check-solution', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(boardValues),
-			});
-			if (!response.ok)
-				throw new Error('Network response was not ok');
-			const ok = await response.json();
-			if (ok.isCorrect) {
-				setSelectedCell({ row: null, col: null });
-				setSudokuFinished(true);
-			} else {
-				console.log('Solution is incorrect. Try again!');
-			}
-		} catch (error) {
-			console.error("Error checking the board: ", error);
+	const boardCheck = () => {
+
+		const boardValues = editableBoard.map(row => row.map(cell => cell.value));
+
+		if (checkSolution(boardValues)) {
+			setSelectedCell({ row: null, col: null });
+			setSudokuFinished(true);
+		} else {
+			console.log('Solution is incorrect. Try again!');
 		}
 	}
 
@@ -77,18 +66,22 @@ export default function SudokuBoard({ editableBoard, initialBoard, setSelectedCe
 			<table className={styles.sudokuTable}>
 				<tbody>
 					{editableBoard.map((row, rowIndex) => (
-						<tr key={rowIndex} className={styles.column}>
+						<tr key={rowIndex} className={styles.row}>
 							{row.map((cell, colIndex) => {
 								const isInitialValue = initialBoard[rowIndex][colIndex] !== 0;
 								const cellClasses = `
 									${styles.cell} 
-									${isInitialValue ? styles.initial : styles.editable}
-									${isHighlighted(rowIndex, colIndex) ? styles.highlight : ''}
-                 					${selectedCell.row === rowIndex && selectedCell.col === colIndex ? styles.focused : ''}								
+									${isInitialValue ? styles.initial : styles.editable}							
 								`;
+								const boxClasses = `
+									${styles.box} 
+									${isHighlighted(rowIndex, colIndex) ? styles.highlight : ''}
+                 					${selectedCell.row === rowIndex && selectedCell.col === colIndex ? styles.focused : ''}
+									p-0
+								`
 
 								return (
-									<td key={colIndex} className={`${styles.box} p-0`}>
+									<td key={colIndex} className={boxClasses}>
 										<div
 											id={`${rowIndex}-${colIndex}`}
 											className={cellClasses}

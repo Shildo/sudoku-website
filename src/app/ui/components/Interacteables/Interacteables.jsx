@@ -40,14 +40,10 @@ export default function Interacteables({ loading, selectedCell, handleCellUpdate
 		}
 	};
 
-	const handleNewGame = async () => {
+	const handleNewGame = () => {
 		setIsPaused(false);
 		reset();
-		try {
-			await fetchNewBoard();
-		} catch (e) {
-			alert('Error fetching board: ', e)
-		}
+		fetchNewBoard();
 	}
 
 	return (
